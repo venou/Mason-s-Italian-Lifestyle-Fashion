@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight, Menu, Search, ShoppingBag, X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 // ---------------- TYPES ----------------
 type MegaColumn = {
@@ -81,22 +81,22 @@ const navItems: NavItem[] = [
 export const Header = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const activeItem = navItems.find((item) => item.label === activeMenu);
-
-  let timeout: NodeJS.Timeout;
 
   return (
     <header className="sticky top-0 z-50 bg-[#f1f1f1] border-b border-stone-200">
       <div className="relative" onMouseLeave={() => setActiveMenu(null)}>
         {/* ---------------- DESKTOP NAV ---------------- */}
-        <div className="hidden lg:grid grid-cols-3 items-center h-14 px-4 text-[12px] uppercase tracking-[0.12em]">
+        <div className="hidden xl:grid grid-cols-3 items-center h-14 px-4 text-[11px] uppercase tracking-[0.1em]">
           {/* LEFT */}
-          <div className="flex items-center gap-4 text-[12px] uppercase tracking-wide font-normal">
+          <div className="flex items-center gap-4 text-[11px] uppercase tracking-wide font-normal">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href="#"
+                onMouseEnter={() => setActiveMenu(item.megaMenu ? item.label : null)}
                 className="hover:text-stone-500 transition-colors whitespace-nowrap"
               >
                 {item.label}
@@ -117,13 +117,13 @@ export const Header = () => {
           <div className="flex justify-end gap-4 uppercase">
             <button className="hover:text-stone-500">SEARCH</button>
             <button className="hover:text-stone-500">BLOG</button>
-            <a className="hover:text-stone-500">Account</a>
-            <a className="hover:text-stone-500">Cart</a>
+            <a href="#" className="hover:text-stone-500">Account</a>
+            <a href="#" className="hover:text-stone-500">Cart</a>
           </div>
         </div>
 
         {/* ---------------- MOBILE NAV ---------------- */}
-        <div className="lg:hidden flex items-center justify-between h-14 px-4">
+        <div className="xl:hidden flex items-center justify-between h-14 px-4">
           <button onClick={() => setIsMobileOpen(!isMobileOpen)}>
             {isMobileOpen ? <X /> : <Menu />}
           </button>
@@ -134,7 +134,7 @@ export const Header = () => {
         </div>
 
         {isMobileOpen && (
-          <div className="lg:hidden px-4 py-4 border-t">
+          <div className="xl:hidden px-4 py-4 border-t">
             {navItems.map((item) => (
               <div key={item.label} className="py-2 text-sm">
                 {item.label}
@@ -146,10 +146,14 @@ export const Header = () => {
         {/* ---------------- MEGA MENU ---------------- */}
         {activeItem?.megaMenu && (
           <div
-            className="hidden lg:block absolute left-0 right-0 top-full bg-white border-t shadow-md"
-            onMouseEnter={() => clearTimeout(timeout)}
+            className="hidden xl:block absolute left-0 right-0 top-full bg-white border-t shadow-md"
+            onMouseEnter={() => {
+              if (closeTimeoutRef.current) {
+                clearTimeout(closeTimeoutRef.current);
+              }
+            }}
             onMouseLeave={() => {
-              timeout = setTimeout(() => setActiveMenu(null), 150);
+              closeTimeoutRef.current = setTimeout(() => setActiveMenu(null), 150);
             }}
           >
             <div className="max-w-7xl mx-auto grid grid-cols-6 px-6 py-6">
