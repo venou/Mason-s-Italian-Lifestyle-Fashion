@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: var(--font-playfair-display), serif;
+  --font-sans: var(--font-montserrat), sans-serif;
+}
+
+@layer base {
+  body {
+    @apply font-sans text-[#1a1a1a] bg-[#fcfcfc] antialiased;
+  }
+  
+  h1, h2, h3, h4, .serif {
+    @apply font-serif tracking-wider;
+  }
+}
+
+@layer utilities {
+  .uppercase-tracking {
+    @apply uppercase tracking-[0.15em] text-[0.7rem];
+  }
+  
+  .hero-overlay {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+  }
+}
