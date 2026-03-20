@@ -1,27 +1,21 @@
 "use client";
 
-// Icons used across desktop and mobile navigation actions.
 import { ChevronRight, Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useState } from "react";
 
-// Reusable type for each mega menu text column.
+// ---------------- TYPES ----------------
 type MegaColumn = {
   heading: string;
   links: string[];
 };
 
-// Primary top-level nav items used in desktop and mobile menus.
-const menuLinks = [
-  "Summer 2026 Men",
-  "Summer 2026 Women",
-  "Winter 2025 Men",
-  "Winter 2025 Women",
-  "Accessories",
-  "Our Story",
-  "Blog",
-];
+type NavItem = {
+  label: string;
+  megaMenu?: MegaColumn[];
+  image?: string;
+};
 
-// Structured data for the desktop mega menu columns.
+// ---------------- DATA ----------------
 const megaMenuColumns: MegaColumn[] = [
   {
     heading: "Summer 2026 Men",
@@ -54,7 +48,6 @@ const megaMenuColumns: MegaColumn[] = [
       "Osaka",
       "Boston",
       "London",
-      "Chile Bermuda",
     ],
   },
   {
@@ -69,181 +62,131 @@ const megaMenuColumns: MegaColumn[] = [
   },
 ];
 
-export const Header = () => {
-  // Controls the mobile hamburger panel.
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+const navItems: NavItem[] = [
+  {
+    label: "Summer 2026 Men",
+    megaMenu: megaMenuColumns,
+    image:
+      "https://us.masons.it/cdn/shop/files/menu-uomo-v1.jpg?v=1741962006&width=700",
+  },
+  { label: "Summer 2026 Women" },
+  { label: "Winter 2025 Men" },
+  { label: "Winter 2025 Women" },
+  { label: "Accessories" },
+  { label: "Our Story" },
+  { label: "Blog" },
+];
 
-  // Tracks which desktop trigger is currently open.
-  const [activeDesktopMenu, setActiveDesktopMenu] = useState<string | null>(
-    null,
-  );
+// ---------------- COMPONENT ----------------
+export const Header = () => {
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+
+  const activeItem = navItems.find((item) => item.label === activeMenu);
+
+  let timeout: NodeJS.Timeout;
 
   return (
-    // Sticky shell so navigation remains visible while scrolling.
-    <header className="sticky top-0 z-50 bg-[#] bg-[#f1f1f1] backdrop-blur-sm border-b border-stone-200">
-      {/* Wrapper captures mouse leave to close desktop mega menu. */}
-      <div className="relative" onMouseLeave={() => setActiveDesktopMenu(null)}>
-        {/* Main container for both desktop and mobile nav bars. */}
-        <div className="max-w-450 mx-auto px-2 lg:px-2">
-          {/* Desktop top row: left links, centered logo, right actions. */}
-          <div className="h-12 hidden lg:flex items-center justify-between text-[12px] uppercase tracking-[0.12em] font-light border-b border-stone-200 relative">
-            {/* Left-side desktop links; first link opens mega menu. */}
-            <div className="flex items-center gap-4">
-              <button
-                onMouseEnter={() => setActiveDesktopMenu("Summer 2026 Men")}
-                className="hover:text-stone-500 transition-colors uppercase"
+    <header className="sticky top-0 z-50 bg-[#f1f1f1] border-b border-stone-200">
+      <div className="relative" onMouseLeave={() => setActiveMenu(null)}>
+        {/* ---------------- DESKTOP NAV ---------------- */}
+        <div className="hidden lg:grid grid-cols-3 items-center h-14 px-4 text-[12px] uppercase tracking-[0.12em]">
+          {/* LEFT */}
+          <div className="flex items-center gap-4 text-[12px] uppercase tracking-wide font-normal">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href="#"
+                className="hover:text-stone-500 transition-colors whitespace-nowrap"
               >
-                Summer 2026 Men
-              </button>
-              {/* Remaining quick links next to mega menu trigger. */}
-              {menuLinks.slice(1, 6).map((item) => (
-                <a
-                  key={item}
-                  href="#"
-                  className="hover:text-stone-500 transition-colors"
-                >
-                  {item}
-                </a>
-              ))}
-              <div className="ml-2">
-                <img
-                  className="w-24"
-                  src="https://us.masons.it/cdn/shop/files/masons-clothing-logo-text.png?height=200&v=1768898312"
-                  alt="Mason's"
-                />
-              </div>
-            </div>
-
-            {/* Centered desktop brand wordmark. */}
-
-            {/* Right-side desktop utility actions. */}
-            <div className="flex items-center gap-4">
-              <button className="hover:text-stone-500 transition-colors">
-                Search
-              </button>
-              <a href="#" className="hover:text-stone-500 transition-colors">
-                Blog
+                {item.label}
               </a>
-              <a href="#" className="hover:text-stone-500 transition-colors">
-                Account
-              </a>
-              <a href="#" className="hover:text-stone-500 transition-colors">
-                Cart
-              </a>
-            </div>
+            ))}
           </div>
 
-          {/* Mobile compact header row. */}
-          <div className="lg:hidden h-16 flex items-center justify-between">
-            {/* Hamburger toggles mobile drawer. */}
-            <button
-              onClick={() => setIsMobileOpen((current) => !current)}
-              className="p-2 -ml-2"
-              aria-label="Toggle mobile menu"
-            >
-              {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-
-            {/* Mobile brand wordmark. */}
-            <h1 className="text-2xl font-bold tracking-[0.08em]">MASON'S</h1>
-
-            {/* Mobile cart shortcut. */}
-            <a href="#" className="p-2 -mr-2" aria-label="Open cart">
-              <ShoppingBag size={19} />
-            </a>
+          {/* CENTER LOGO */}
+          <div className="flex justify-center ml-40">
+            <img
+              className="w-24"
+              src="https://us.masons.it/cdn/shop/files/masons-clothing-logo-text.png?height=200&v=1768898312"
+              alt="Mason's"
+            />
           </div>
 
-          {/* Mobile slide-down navigation panel. */}
-          {isMobileOpen && (
-            <nav className="lg:hidden py-4 border-t border-stone-200">
-              {/* Mobile primary links list. */}
-              <div className="grid grid-cols-1 gap-2 text-[11px] uppercase tracking-[0.15em]">
-                {menuLinks.map((item) => (
-                  <a
-                    key={item}
-                    href="#"
-                    className="py-2 hover:text-stone-500 transition-colors"
-                  >
-                    {item}
-                  </a>
-                ))}
-              </div>
-
-              {/* Mobile utility actions row. */}
-              <div className="mt-4 pt-4 border-t border-stone-200 flex items-center gap-5 text-[11px] uppercase tracking-[0.12em]">
-                <button className="flex items-center gap-2 hover:text-stone-500 transition-colors">
-                  <Search size={14} />
-                  Search
-                </button>
-                <a href="#" className="hover:text-stone-500 transition-colors">
-                  Account
-                </a>
-              </div>
-            </nav>
-          )}
+          {/* RIGHT */}
+          <div className="flex justify-end gap-4 uppercase">
+            <button className="hover:text-stone-500">SEARCH</button>
+            <button className="hover:text-stone-500">BLOG</button>
+            <a className="hover:text-stone-500">Account</a>
+            <a className="hover:text-stone-500">Cart</a>
+          </div>
         </div>
 
-        {/* Desktop mega menu panel for Summer 2026 Men. */}
-        {activeDesktopMenu === "Summer 2026 Men" && (
-          <div className="hidden lg:block  absolute left-0 right-0 top-full border-b border-stone-200">
-            <div className="h-12 bg-[#f1f1f1] shadow"></div>
-            {/* Mega menu inner canvas with subtle camouflage-like texture. */}
-            <div
-              className="mx-auto max-w-480 px-2 py-2 bg-white"
-              style={{
-                backgroundImage:
-                  "radial-gradient(circle at 15% 20%, rgba(255,255,255,0.45) 0 8%, transparent 9%), radial-gradient(circle at 38% 65%, rgba(255,255,255,0.45) 0 9%, transparent 10%), radial-gradient(circle at 72% 28%, rgba(255,255,255,0.4) 0 8%, transparent 9%), radial-gradient(circle at 84% 72%, rgba(255,255,255,0.35) 0 10%, transparent 11%)",
-              }}
-            >
-              {/* 6-column layout: 5 text columns + 1 promo image column. */}
-              <div className="grid grid-cols-6 gap-0 text-[30px]">
-                {/* Text columns sourced from shared mega menu data. */}
-                {megaMenuColumns.map((column) => (
-                  <div
-                    key={column.heading}
-                    className="px-4 border-r border-stone-300 min-h-85"
-                  >
-                    {/* Column heading label. */}
-                    <h3 className="text-[11px] uppercase tracking-[0.12em] mb-8 font-medium">
-                      {column.heading}
-                    </h3>
+        {/* ---------------- MOBILE NAV ---------------- */}
+        <div className="lg:hidden flex items-center justify-between h-14 px-4">
+          <button onClick={() => setIsMobileOpen(!isMobileOpen)}>
+            {isMobileOpen ? <X /> : <Menu />}
+          </button>
 
-                    {/* Column item links. */}
-                    <ul className="space-y-3 text-[30px]">
-                      {column.links.map((link) => (
-                        <li key={link}>
-                          <a
-                            href="#"
-                            className="text-[28px] leading-[1.15] hover:opacity-65 transition-opacity"
-                          >
-                            {link}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+          <h1 className="text-xl font-bold">MASON'S</h1>
 
-                {/* Visual promo column with image and CTA. */}
-                <div className="px-4">
-                  <h3 className="text-[11px] uppercase tracking-[0.12em] mb-6 font-medium">
-                    SS26 Mason's Men
-                  </h3>
-                  <img
-                    src="https://us.masons.it/cdn/shop/files/menu-uomo-v1.jpg?v=1741962006&width=700"
-                    alt="SS26 Mason's Men"
-                    className="w-full h-auto object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                  <a
-                    href="#"
-                    className="mt-4 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] hover:opacity-70 transition-opacity"
-                  >
-                    Explore Collection
-                    <ChevronRight size={14} />
-                  </a>
-                </div>
+          <ShoppingBag />
+        </div>
+
+        {isMobileOpen && (
+          <div className="lg:hidden px-4 py-4 border-t">
+            {navItems.map((item) => (
+              <div key={item.label} className="py-2 text-sm">
+                {item.label}
               </div>
+            ))}
+          </div>
+        )}
+
+        {/* ---------------- MEGA MENU ---------------- */}
+        {activeItem?.megaMenu && (
+          <div
+            className="hidden lg:block absolute left-0 right-0 top-full bg-white border-t shadow-md"
+            onMouseEnter={() => clearTimeout(timeout)}
+            onMouseLeave={() => {
+              timeout = setTimeout(() => setActiveMenu(null), 150);
+            }}
+          >
+            <div className="max-w-7xl mx-auto grid grid-cols-6 px-6 py-6">
+              {/* TEXT COLUMNS */}
+              {activeItem.megaMenu.map((col) => (
+                <div key={col.heading} className="px-4">
+                  <h3 className="text-xs uppercase mb-4 font-medium">
+                    {col.heading}
+                  </h3>
+
+                  <ul className="space-y-2 text-sm">
+                    {col.links.map((link) => (
+                      <li
+                        key={link}
+                        className="hover:text-stone-500 cursor-pointer"
+                      >
+                        {link}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+
+              {/* IMAGE */}
+              {activeItem.image && (
+                <div className="px-4 col-span-1">
+                  <img
+                    src={activeItem.image}
+                    className="w-full object-cover"
+                    alt="menu"
+                  />
+
+                  <div className="mt-3 text-xs uppercase flex items-center gap-1">
+                    Explore <ChevronRight size={14} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
