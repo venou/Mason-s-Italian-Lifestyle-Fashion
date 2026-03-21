@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Montserrat, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -28,6 +29,7 @@ export default function RootLayout({
         className={`${montserrat.variable} ${playfairDisplay.variable}`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );

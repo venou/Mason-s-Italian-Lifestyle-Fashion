@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronRight, Menu, Search, ShoppingBag, X } from "lucide-react";
+import { div } from "motion/react-client";
 import { useRef, useState } from "react";
 
 // ---------------- TYPES ----------------
@@ -96,7 +97,9 @@ export const Header = () => {
               <a
                 key={item.label}
                 href="#"
-                onMouseEnter={() => setActiveMenu(item.megaMenu ? item.label : null)}
+                onMouseEnter={() =>
+                  setActiveMenu(item.megaMenu ? item.label : null)
+                }
                 className="hover:text-stone-500 transition-colors whitespace-nowrap"
               >
                 {item.label}
@@ -105,7 +108,7 @@ export const Header = () => {
           </div>
 
           {/* CENTER LOGO */}
-          <div className="flex justify-center ml-40">
+          <div className="flex justify-center ml-22">
             <img
               className="w-24"
               src="https://us.masons.it/cdn/shop/files/masons-clothing-logo-text.png?height=200&v=1768898312"
@@ -117,8 +120,12 @@ export const Header = () => {
           <div className="flex justify-end gap-4 uppercase">
             <button className="hover:text-stone-500">SEARCH</button>
             <button className="hover:text-stone-500">BLOG</button>
-            <a href="#" className="hover:text-stone-500">Account</a>
-            <a href="#" className="hover:text-stone-500">Cart</a>
+            <a href="#" className="hover:text-stone-500">
+              Account
+            </a>
+            <a href="#" className="hover:text-stone-500">
+              Cart
+            </a>
           </div>
         </div>
 
@@ -146,29 +153,35 @@ export const Header = () => {
         {/* ---------------- MEGA MENU ---------------- */}
         {activeItem?.megaMenu && (
           <div
-            className="hidden xl:block absolute left-0 right-0 top-full bg-white border-t shadow-md"
+            className="hidden xl:block absolute left-0 right-0 top-full bg-white border-t border-stone-200"
             onMouseEnter={() => {
               if (closeTimeoutRef.current) {
                 clearTimeout(closeTimeoutRef.current);
               }
             }}
             onMouseLeave={() => {
-              closeTimeoutRef.current = setTimeout(() => setActiveMenu(null), 150);
+              closeTimeoutRef.current = setTimeout(
+                () => setActiveMenu(null),
+                150,
+              );
             }}
           >
-            <div className="max-w-7xl mx-auto grid grid-cols-6 px-6 py-6">
+            <div className="max-w-7xl mx-4 grid grid-cols-6 px-6 py-8 justify-center">
               {/* TEXT COLUMNS */}
-              {activeItem.megaMenu.map((col) => (
-                <div key={col.heading} className="px-4">
-                  <h3 className="text-xs uppercase mb-4 font-medium">
+              {activeItem.megaMenu.map((col, index) => (
+                <div
+                  key={col.heading}
+                  className="px-6 pr-18 border-r border-stone-200"
+                >
+                  <h3 className="text-[11px] uppercase tracking-[0.12em] mb-6 font-medium text-stone-700">
                     {col.heading}
                   </h3>
 
-                  <ul className="space-y-2 text-sm">
+                  <ul className="space-y-3">
                     {col.links.map((link) => (
                       <li
                         key={link}
-                        className="hover:text-stone-500 cursor-pointer"
+                        className="text-[14px] hover:opacity-60 transition cursor-pointer"
                       >
                         {link}
                       </li>
@@ -177,16 +190,23 @@ export const Header = () => {
                 </div>
               ))}
 
-              {/* IMAGE */}
+              {/* IMAGE COLUMN (no border here) */}
               {activeItem.image && (
-                <div className="px-4 col-span-1">
+                <div className="px-6 pl-12 mx-auto">
+                  <h3 className="text-[11px] uppercase tracking-[0.12em] mb-4 font-medium text-stone-700">
+                    SS26 Mason's Men
+                  </h3>
+
                   <img
-                    src={activeItem.image}
-                    className="w-full object-cover"
+                    src={
+                      "https://us.masons.it/cdn/shop/collections/f8572b60f828d7e0d98960e961224a3d_6a197bad-1a24-4aea-80b5-b1084118e6a3.jpg?v=1765286806&width=832"
+                    }
+                    sizes="44"
+                    className="w-full object-contain"
                     alt="menu"
                   />
 
-                  <div className="mt-3 text-xs uppercase flex items-center gap-1">
+                  <div className="mt-4 text-[11px] uppercase tracking-[0.14em] flex items-center gap-1 hover:opacity-70 transition cursor-pointer">
                     Explore <ChevronRight size={14} />
                   </div>
                 </div>
