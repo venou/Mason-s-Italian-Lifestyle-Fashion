@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { AnnouncementBar } from "./components/AnnouncementBar";
-import { Header } from "./components/Header";
-import { Hero } from "./components/Hero";
-import { Categories } from "./components/Categories";
-import { MilanoFeature } from "./components/MilanoFeature";
-import { AboutUs } from "./components/AboutUs";
-import { PersonalShopper } from "./components/PersonalShopper";
-import { Footer } from "./components/Footer";
-import { NewsletterPopup } from "./components/NewsletterPopup";
+import { AnnouncementBar } from "../components/AnnouncementBar";
+import { Header } from "../components/Header";
+import { Hero } from "../components/Hero";
+import { Categories } from "../components/Categories";
+import { MilanoFeature } from "../components/MilanoFeature";
+import { AboutUs } from "../components/AboutUs";
+import { PersonalShopper } from "../components/PersonalShopper";
+import { Footer } from "../components/Footer";
+import { NewsletterPopup } from "../components/NewsletterPopup";
 
 export default function Page() {
   const [isAuthReady, setIsAuthReady] = useState(false);

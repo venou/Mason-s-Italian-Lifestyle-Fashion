@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ChevronRight, Menu, Search, ShoppingBag, X } from "lucide-react";
 import { div } from "motion/react-client";
 import { useRef, useState } from "react";
@@ -120,9 +121,9 @@ export const Header = () => {
           <div className="flex justify-end gap-4 uppercase">
             <button className="hover:text-stone-500">SEARCH</button>
             <button className="hover:text-stone-500">BLOG</button>
-            <a href="#" className="hover:text-stone-500">
+            <Link href="/login" className="hover:text-stone-500">
               Account
-            </a>
+            </Link>
             <a href="#" className="hover:text-stone-500">
               Cart
             </a>
@@ -147,6 +148,11 @@ export const Header = () => {
                 {item.label}
               </div>
             ))}
+            <div className="pt-4 mt-4 border-t border-stone-200 text-sm uppercase tracking-[0.16em]">
+              <Link href="/login" onClick={() => setIsMobileOpen(false)}>
+                Account
+              </Link>
+            </div>
           </div>
         )}
 
